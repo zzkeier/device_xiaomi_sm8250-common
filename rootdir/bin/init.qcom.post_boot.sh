@@ -954,31 +954,31 @@ function configure_memory_parameters() {
     ProductName=`getprop ro.product.name`
     low_ram=`getprop ro.config.low_ram`
 
-    if [ "$ProductName" == "msmnile" ] || [ "$ProductName" == "kona" ] || [ "$ProductName" == "sdmshrike_au" ] || [ "$ProductName" == "alioth" ]; then
-        # Enable ZRAM
-        configure_zram_parameters
-        configure_read_ahead_kb_values
-        echo 0 > /proc/sys/vm/page-cluster
-        echo 100 > /proc/sys/vm/swappiness
+if [ "$ProductName" == "msmnile" ] || [ "$ProductName" == "kona" ] || [ "$ProductName" == "sdmshrike_au" ] || [ "$ProductName" == "alioth" ]; then
+    # Enable ZRAM
+    configure_zram_parameters
+    configure_read_ahead_kb_values
+    echo 0 > /proc/sys/vm/page-cluster
+    echo 100 > /proc/sys/vm/swappiness
 
-        #add memory limit to camera cgroup
-        MemTotalStr=`cat /proc/meminfo | grep MemTotal`
-        MemTotal=${MemTotalStr:16:8}
-        if [ $MemTotal -gt 8388608 ]; then
-            let LimitSize=838860800
-        else
-            let LimitSize=524288000
-        fi
-
-        echo $LimitSize > /dev/memcg/camera/memory.soft_limit_in_bytes
+    #add memory limit to camera cgroup
+    MemTotalStr=`cat /proc/meminfo | grep MemTotal`
+    MemTotal=${MemTotalStr:16:8}
+    if [ $MemTotal -gt 8388608 ]; then
+        let LimitSize=838860800
     else
-        arch_type=`uname -m`
-        MemTotalStr=`cat /proc/meminfo | grep MemTotal`
-        MemTotal=${MemTotalStr:16:8}
+        let LimitSize=524288000
+    fi
 
-        # Set parameters for 32-bit Go targets.
-        if [ $MemTotal -le 1048576 ] && [ "$low_ram" == "true" ]; then
-            # Disable KLMK, ALMK, PPR & Core Control for Go devices
+    echo $LimitSize > /dev/memcg/camera/memory.soft_limit_in_bytes
+else
+    arch_type=`uname -m`
+    MemTotalStr=`cat /proc/meminfo | grep MemTotal`
+    MemTotal=${MemTotalStr:16:8}
+
+    # Set parameters for 32-bit Go targets.
+    if [ $MemTotal -le 1048576 ] && [ "$low_ram" == "true" ]; then
+        # Disable KLMK, ALMK, PPR & Core Control for Go devices
         echo 0 > /sys/module/lowmemorykiller/parameters/enable_lmk
         echo 0 > /sys/module/lowmemorykiller/parameters/enable_adaptive_lmk
         echo 0 > /sys/module/process_reclaim/parameters/enable_process_reclaim
