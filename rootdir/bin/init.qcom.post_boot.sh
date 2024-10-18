@@ -954,7 +954,7 @@ function configure_memory_parameters() {
     ProductName=`getprop ro.product.name`
     low_ram=`getprop ro.config.low_ram`
 
-if [ "$ProductName" == "msmnile" ] || [ "$ProductName" == "kona" ] || [ "$ProductName" == "sdmshrike_au" ] || [ "$ProductName" == "alioth" ]; then
+if [ "$ProductName" == "msmnile" ] || [ "$ProductName" == "kona" ] || [ "$ProductName" == "sdmshrike_au" ] || [ "$ProductName" == *"alioth"* ]; then
     # Enable ZRAM
     configure_zram_parameters
     configure_read_ahead_kb_values
@@ -1076,7 +1076,7 @@ else
 
     # Set allocstall_threshold to 0 for all targets.
     # Set swappiness to 100 for all targets
-    if [[ "$ProductName" == "munch"* ]]; then
+    if [[ "$ProductName" == *"munch"* ]]; then
           echo 0 > /sys/module/vmpressure/parameters/allocstall_threshold
           echo 60 > /proc/sys/vm/swappiness
     else
