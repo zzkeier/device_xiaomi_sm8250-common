@@ -204,6 +204,9 @@ PRODUCT_PACKAGES += \
     android.hardware.health-service.qti_recovery
 endif
 
+PRODUCT_COPY_FILES += \
+    $(LOCAL_PATH)/configs/org.lineageos.health.excluded.xml:$(TARGET_COPY_OUT_PRODUCT)/etc/permissions/org.lineageos.health.excluded.xml
+
 # HotwordEnrollement app permissions
 PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/permissions/privapp-permissions-hotword.xml:$(TARGET_COPY_OUT_PRODUCT)/etc/permissions/privapp-permissions-hotword.xml
@@ -239,8 +242,8 @@ PRODUCT_PACKAGES += \
     android.hardware.light-service.xiaomi
 
 # Lineage Health
-PRODUCT_PACKAGES += \
-    vendor.lineage.health-service.default
+# PRODUCT_PACKAGES += \
+#     vendor.lineage.health-service.default
 
 # Media configs
 PRODUCT_PACKAGES += \
